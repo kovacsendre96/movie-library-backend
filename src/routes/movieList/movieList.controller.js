@@ -3,15 +3,16 @@ const Movie = require("../../models/Movie");
 
 function store(req, res) {
   const body = req.body;
-  const movie = new Movie(body);
+  //const movie = new Movie(body);
   const sql = "INSERT INTO movie_list SET ?";
-  db.query(sql, movie, (error, result) => {
+  db.query(sql, body, (error, result) => {
     if (error) {
+      console.log("EZ AZ ERROR", error);
       throw error;
     }
   });
 
-  return res.status(200).json(movie);
+  return res.status(200).json(body);
 }
 
 function index(req, res) {

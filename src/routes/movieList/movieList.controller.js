@@ -1,13 +1,13 @@
-const db = require("../../database/dbconfig");
-const Movie = require("../../models/Movie");
+const db = require('../../database/dbconfig');
+const Movie = require('../../models/Movie');
 
 function store(req, res) {
   const body = req.body;
-  //const movie = new Movie(body);
-  const sql = "INSERT INTO movie_list SET ?";
+  const sql = 'INSERT INTO movies SET ?';
+  console.log(body);
   db.query(sql, body, (error, result) => {
     if (error) {
-      console.log("EZ AZ ERROR", error);
+      console.log('error', error);
       throw error;
     }
   });
@@ -16,7 +16,7 @@ function store(req, res) {
 }
 
 function index(req, res) {
-  const sql = "SELECT * FROM movie_list";
+  const sql = 'SELECT * FROM movies';
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -26,7 +26,7 @@ function index(req, res) {
 }
 
 function show(req, res) {
-  const sql = `SELECT * FROM movie_list WHERE id = '${req.params.id}'`;
+  const sql = `SELECT * FROM movies WHERE id = '${req.params.id}'`;
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -36,8 +36,7 @@ function show(req, res) {
 }
 
 function deleteMovie(req, res) {
-  const sql = `DELETE  FROM movie_list WHERE id = '${req.params.id}'`;
-  console.log(sql);
+  const sql = `DELETE  FROM movies WHERE id = '${req.params.id}'`;
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -50,11 +49,11 @@ function update(req, res) {
   const sql = `UPDATE movie_list SET ? WHERE id = '${req.params.id}'`;
   const body = req.body;
   const movie = new Movie(body);
-  console.log(sql);
   db.query(sql, movie, (error, result) => {
     if (error) {
       throw error;
     }
+
     return res.status(200).json(result[0]);
   });
 }

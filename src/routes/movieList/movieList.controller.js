@@ -3,16 +3,29 @@ const Movie = require('../../models/Movie');
 
 function store(req, res) {
   const body = req.body;
-  const sql = 'INSERT INTO movies SET ?';
-  console.log(body);
-  db.query(sql, body, (error, result) => {
+  const id = body.id;
+  const sql = 'SELECT id FROM movies WHERE id = ?';
+  db.query(sql, id, (error, result) => {
     if (error) {
       console.log('error', error);
       throw error;
     }
+    if (result.length > 0) {
+      return res
+        .status(400)
+        .json({ message: 'Az azonosító már szerepel az adatbázisban.' });
+    } else {
+      const sql = 'INSERT INTO movies SET ?';
+      console.log(body);
+      db.query(sql, body, (error, result) => {
+        if (error) {
+          console.log('error', error);
+          throw error;
+        }
+        return res.status(200).json(body);
+      });
+    }
   });
-
-  return res.status(200).json(body);
 }
 
 function index(req, res) {
